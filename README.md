@@ -12,10 +12,16 @@ And whenever you install any new packages, run the following command to update t
 pip freeze > requirements.txt
 ```
 
-You need to setup the database:
+Setup the database in this order:
 
 ```bash
+# First, create migration files if you have changes on custom models
+python manage.py makemigrations
+
+# Then, apply migrations to the database
 python manage.py migrate
+
+# Finally, create an admin user
 python manage.py createsuperuser --username admin --email admin@example.com
 ```
 
