@@ -1,0 +1,29 @@
+# Virtual Environment - only ignore the environment files, not dependency specs
+env/
+venv/
+ENV/
+.Python
+pyvenv.cfg
+
+# BUT DO NOT IGNORE these dependency files:
+# requirements.txt
+# Pipfile
+# Pipfile.lock
+# poetry.lock
+# pyproject.toml
+
+# Rest of the gitignore remains the same...
+.env
+.env.local
+.env.*
+!.env.example
+
+# Database files
+*.sqlite3
+*.db
+*.sql
+
+# Python
+__pycache__/
+*.py[cod]
+# ... rest of the previous ignores ... 
