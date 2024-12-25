@@ -14,6 +14,17 @@ class AuthViewSet(viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
 
     @action(detail=False, methods=['post'])
+    def register(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        login(request, user)  # Automatically log in after registration
+        return Response({
+            "message": "User created and logged in successfully",
+            "username": user.username
+        }, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['post'])
     def login(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
