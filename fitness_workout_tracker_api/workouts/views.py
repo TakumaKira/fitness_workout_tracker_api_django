@@ -4,12 +4,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from .models import Workout, Exercise, WorkoutExercise
+from .models import Workout, Exercise, WorkoutExercise, Comment
 from .serializers import (
     WorkoutSerializer, 
     ExerciseSerializer, 
     WorkoutExerciseSerializer,
-    AddExerciseToWorkoutSerializer
+    AddExerciseToWorkoutSerializer,
+    CommentSerializer
 )
 
 class ExerciseViewSet(viewsets.ModelViewSet):
@@ -105,3 +106,24 @@ class WorkoutExerciseViewSet(viewsets.ModelViewSet):
         )
         workout_exercise.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class WorkoutCommentViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing workout comments
+    """
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Comment.objects.filter(
+            workout_id=self.kwargs['workout_pk'],
+            workout__user=self.request.user
+        )
+
+    def perform_create(self, serializer):
+        workout = get_object_or_404(
+            Workout,
+            id=self.kwargs['workout_pk'],
+            user=self.request.user
+        )
+        serializer.save(workout=workout, user=self.request.user)

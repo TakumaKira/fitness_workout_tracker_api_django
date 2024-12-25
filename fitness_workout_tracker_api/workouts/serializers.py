@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Workout, Exercise, WorkoutExercise
+from .models import Workout, Exercise, WorkoutExercise, Comment
 
 class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,13 +35,22 @@ class AddExerciseToWorkoutSerializer(serializers.ModelSerializer):
         except Exercise.DoesNotExist:
             raise serializers.ValidationError("Exercise not found")
 
+class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'text', 'username', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
 class WorkoutSerializer(serializers.ModelSerializer):
     exercises = WorkoutExerciseSerializer(source='workout_exercises', many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Workout
         fields = ['id', 'title', 'description', 'date', 'duration', 
-                 'created_at', 'updated_at', 'exercises']
+                 'created_at', 'updated_at', 'exercises', 'comments']
         read_only_fields = ['created_at', 'updated_at']
 
     def create(self, validated_data):
