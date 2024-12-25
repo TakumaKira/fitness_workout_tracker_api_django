@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'fitness_workout_tracker_api.authentication',
+    'fitness_workout_tracker_api.workouts',
 ]
 
 MIDDLEWARE = [
