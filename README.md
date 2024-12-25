@@ -24,3 +24,9 @@ To run the project, use the following command:
 ```bash
 python manage.py runserver
 ```
+
+To run security checks, use the following command:
+
+```bash
+DJANGO_DEBUG=False python manage.py check --deploy
+```

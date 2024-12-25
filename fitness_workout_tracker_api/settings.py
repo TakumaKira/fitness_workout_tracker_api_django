@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3ss=uel_@$synm49e-=&tcy#aw9+rot$g*_(#^64(m*(bx-ht+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'fitness_workout_tracker_api.authentication',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +126,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Add REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+# Session settings
+SESSION_COOKIE_SECURE = True  # for HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Prevents JavaScript access to session cookie
+SESSION_COOKIE_SAMESITE = 'Strict'  # Protects against CSRF
+CSRF_COOKIE_SECURE = True  # for HTTPS
+CSRF_COOKIE_HTTPONLY = True  # Prevents JavaScript access to CSRF cookie
+CSRF_COOKIE_SAMESITE = 'Strict'  # Protects against CSRF
+
+# If you're testing locally without HTTPS, temporarily set these to False
+if DEBUG:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
