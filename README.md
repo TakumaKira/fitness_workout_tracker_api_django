@@ -36,3 +36,35 @@ To run security checks, use the following command:
 ```bash
 DJANGO_DEBUG=False python manage.py check --deploy
 ```
+
+## Running Tests
+
+Run all tests:
+```bash
+python manage.py test
+```
+
+Run tests for a specific app:
+```bash
+python manage.py test fitness_workout_tracker_api.workouts.tests
+```
+
+Run a specific test class:
+```bash
+python manage.py test fitness_workout_tracker_api.workouts.tests.WorkoutIsolationTests
+```
+
+Run a specific test method:
+```bash
+python manage.py test fitness_workout_tracker_api.workouts.tests.WorkoutIsolationTests.test_exercise_isolation
+```
+
+Run a specific test method:
+```bash
+python manage.py test fitness_workout_tracker_api.workouts.tests.WorkoutIsolationTests.test_exercise_isolation
+```
+
+To run tests with more detailed output:
+```bash
+python manage.py test -v 2
+```
