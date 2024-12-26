@@ -42,10 +42,12 @@ class WorkoutExerciseViewSet(viewsets.ModelViewSet):
         return WorkoutExerciseSerializer
 
     def get_queryset(self):
-        return WorkoutExercise.objects.filter(
-            workout_id=self.kwargs['workout_pk'],
-            workout__user=self.request.user
+        workout = get_object_or_404(
+            Workout,
+            id=self.kwargs['workout_pk'],
+            user=self.request.user
         )
+        return WorkoutExercise.objects.filter(workout=workout)
 
     def create(self, request, workout_pk=None):
         """
@@ -115,10 +117,12 @@ class WorkoutCommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Comment.objects.filter(
-            workout_id=self.kwargs['workout_pk'],
-            workout__user=self.request.user
+        workout = get_object_or_404(
+            Workout,
+            id=self.kwargs['workout_pk'],
+            user=self.request.user
         )
+        return Comment.objects.filter(workout=workout)
 
     def perform_create(self, serializer):
         workout = get_object_or_404(
